@@ -1,11 +1,12 @@
 import React from 'react';
 
+/**
+ * Container for wraping all child components.
+ */
 const MainApp = () => (
-  <div>
-    <main>
-      <h1>Main Application</h1>
-    </main>
-  </div>
+  <main>
+    <h1>Main Application</h1>
+  </main>
 );
 
 export default MainApp;

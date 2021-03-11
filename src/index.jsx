@@ -13,7 +13,6 @@ import Footer, { messages as footerMessages } from '@edx/frontend-component-foot
 
 import appMessages from './i18n';
 import MainApp from './containers/MainApp';
-
 import store from './data/store';
 import history from './data/history';
 
