@@ -3,23 +3,22 @@ import 'babel-polyfill';
 import {
   APP_INIT_ERROR, APP_READY, subscribe, initialize,
 } from '@edx/frontend-platform';
-import { AppProvider, ErrorPage } from '@edx/frontend-platform/react';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import { AppProvider, ErrorPage } from '@edx/frontend-platform/react';
 import Header, { messages as headerMessages } from '@edx/frontend-component-header';
 import Footer, { messages as footerMessages } from '@edx/frontend-component-footer';
 
 import appMessages from './i18n';
-import ExamplePage from './example/ExamplePage';
-
+import MainApp from './components/MainApp';
 import './index.scss';
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
     <AppProvider>
       <Header />
-      <ExamplePage />
+      <MainApp />
       <Footer />
     </AppProvider>,
     document.getElementById('root'),
@@ -36,4 +35,5 @@ initialize({
     headerMessages,
     footerMessages,
   ],
+  requireAuthenticatedUser: true,
 });
