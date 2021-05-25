@@ -9,16 +9,23 @@ import ReactDOM from 'react-dom';
 import { AppProvider, ErrorPage } from '@edx/frontend-platform/react';
 import Header, { messages as headerMessages } from '@edx/frontend-component-header';
 import Footer, { messages as footerMessages } from '@edx/frontend-component-footer';
+import { Route, Switch } from 'react-router-dom';
 
 import appMessages from './i18n';
-import MainApp from './components/MainApp';
+import { App } from './components/App';
 import './index.scss';
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
     <AppProvider>
       <Header />
-      <MainApp />
+      <Switch>
+        <Route
+          path="/"
+          exact
+          component={App}
+        />
+      </Switch>
       <Footer />
     </AppProvider>,
     document.getElementById('root'),
