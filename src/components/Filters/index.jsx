@@ -43,4 +43,4 @@ const Filter = ({
   </div>
 );
 
-export default Filter;
+export { Filter };

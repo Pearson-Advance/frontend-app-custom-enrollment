@@ -70,42 +70,42 @@ const Table = ({ data, handleClickFilter, handleClickUnenroll }) => {
               <>
                 {
                   row.values.is_active === 'Yes' && (
-                  <div>
-                    <Button
-                      variant="brand"
-                      onClick={open}
-                    >
-                      Unenroll
-                    </Button>
-                    <AlertModal
-                      title="Alert!"
-                      isOpen={isOpen}
-                      onClose={close}
-                      footerNode={(
-                        <ActionRow>
-                          <Button variant="tertiary" onClick={close}>Cancel</Button>
-                          <Button
-                            variant="danger"
-                            onClick={() => {
-                              const unenrollData = {
-                                enrollment_id: row.original.id,
-                                course_id: row.values.course_id,
-                                username: row.values.username,
-                              };
-                              handleClickUnenroll(unenrollData);
-                              close();
-                            }}
-                          >
-                            Unenroll
-                          </Button>
-                        </ActionRow>
-                          )}
-                    >
-                      <p>Are you sure you want to unenroll?.</p>
-                    </AlertModal>
-                  </div>
+                    <div>
+                      <Button
+                        variant="brand"
+                        onClick={open}
+                      >
+                        Unenroll
+                      </Button>
+                      <AlertModal
+                        title="Alert!"
+                        isOpen={isOpen}
+                        onClose={close}
+                        footerNode={(
+                          <ActionRow>
+                            <Button variant="tertiary" onClick={close}>Cancel</Button>
+                            <Button
+                              variant="danger"
+                              onClick={() => {
+                                const unenrollData = {
+                                  enrollment_id: row.original.id,
+                                  course_id: row.values.course_id,
+                                  username: row.values.username,
+                                };
+                                handleClickUnenroll(unenrollData);
+                                close();
+                              }}
+                            >
+                              Unenroll
+                            </Button>
+                          </ActionRow>
+                        )}
+                      >
+                        <p>Are you sure you want to unenroll?.</p>
+                      </AlertModal>
+                    </div>
                   )
-}
+                }
               </>
             );
           },
@@ -120,4 +120,4 @@ const Table = ({ data, handleClickFilter, handleClickUnenroll }) => {
   );
 };
 
-export default Table;
+export { Table };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Toast, Container } from '@edx/paragon';
-import Filter from '../Filters';
-import Table from '../Table';
+import { Filter } from '../Filters';
+import { Table } from '../Table';
 
 import useForm from '../../hooks/useForm';
 import EnrollmentDataApiService from '../../services/dataApi';

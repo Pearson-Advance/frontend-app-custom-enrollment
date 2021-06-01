@@ -9,11 +9,12 @@ import ReactDOM from 'react-dom';
 import { AppProvider, ErrorPage } from '@edx/frontend-platform/react';
 import Header, { messages as headerMessages } from '@edx/frontend-component-header';
 import Footer, { messages as footerMessages } from '@edx/frontend-component-footer';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import appMessages from './i18n';
 import { App } from './components/App';
 import './index.scss';
+import { CreateEnrollment } from './components/CreateEnrollment';
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
@@ -25,6 +26,12 @@ subscribe(APP_READY, () => {
           exact
           component={App}
         />
+        <Route
+          path="/create"
+          exact
+          component={CreateEnrollment}
+        />
+        <Redirect to="/" />
       </Switch>
       <Footer />
     </AppProvider>,
