@@ -11,20 +11,17 @@ import Header, { messages as headerMessages } from '@edx/frontend-component-head
 import Footer, { messages as footerMessages } from '@edx/frontend-component-footer';
 import { Route, Switch } from 'react-router-dom';
 
+import { App } from 'components/App';
+import { store } from 'data/store';
 import appMessages from './i18n';
-import { App } from './components/App';
 import './index.scss';
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
-    <AppProvider>
+    <AppProvider store={store}>
       <Header />
       <Switch>
-        <Route
-          path="/"
-          exact
-          component={App}
-        />
+        <Route path="/" component={App} exact />
       </Switch>
       <Footer />
     </AppProvider>,
