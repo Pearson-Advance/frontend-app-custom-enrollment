@@ -19,7 +19,7 @@ const filterEnrollmentsAction = filterValues => dispatch => {
     }).catch((error) => {
       dispatch({
         type: FILTER_ENROLLMENTS_FAILURE,
-        error,
+        error: JSON.parse(error.customAttributes.httpErrorResponseData).message,
       });
     });
 };
@@ -35,7 +35,7 @@ const unenrollAction = params => dispatch => {
     }).catch((error) => {
       dispatch({
         type: UNENROLL_FAILURE,
-        error: error.message.substring(0, 50),
+        error: JSON.parse(error.customAttributes.httpErrorResponseData).message,
       });
     });
 };

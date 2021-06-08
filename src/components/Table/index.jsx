@@ -1,11 +1,14 @@
 import React from 'react';
-
+import { PropTypes } from 'prop-types';
 import {
   Button, DataTable, AlertModal, ActionRow, useToggle, Icon, Badge,
 } from '@edx/paragon';
 import { Close } from '@edx/paragon/icons';
+import { useDispatch } from 'react-redux';
+import { unenrollAction } from 'data/actions/enrollment';
 
-const Table = ({ data, handleClickUnenroll }) => {
+const Table = ({ data }) => {
+  const dispatch = useDispatch();
   const enrollmentTableColumns = [
     {
       Header: 'User',
@@ -65,42 +68,41 @@ const Table = ({ data, handleClickUnenroll }) => {
             return (
               <>
                 {
-                  row.values.is_active === 'Yes' && (
-                    <div>
-                      <Button
-                        variant="brand"
-                        onClick={open}
-                      >
-                        Unenroll<Icon src={Close} />
-                      </Button>
-                      <AlertModal
-                        title="Alert!"
-                        isOpen={isOpen}
-                        onClose={close}
-                        footerNode={(
-                          <ActionRow>
-                            <Button variant="tertiary" onClick={close}>Cancel</Button>
-                            <Button
-                              variant="danger"
-                              onClick={() => {
-                                const unenrollData = {
-                                  enrollment_id: row.original.id,
-                                  course_id: row.values.course_id,
-                                  username: row.values.username,
-                                };
-                                handleClickUnenroll(unenrollData);
-                                close();
-                              }}
-                            >
-                              Unenroll
+                  row.values.is_active === 'Yes' &&
+                  <>
+                    <Button
+                      size="sm"
+                      variant="brand"
+                      onClick={open}
+                    >
+                      Unenroll<Icon src={Close} />
+                    </Button>
+                    <AlertModal
+                      title="Alert!"
+                      isOpen={isOpen}
+                      onClose={close}
+                      footerNode={(
+                        <ActionRow>
+                          <Button variant="tertiary" onClick={close}>Cancel</Button>
+                          <Button
+                            variant="danger"
+                            onClick={() => {
+                              dispatch(unenrollAction({
+                                enrollment_id: row.original.id,
+                                course_id: row.values.course_id,
+                                username: row.values.username,
+                              }))
+                              close();
+                            }}
+                          >
+                            Unenroll
                             </Button>
-                          </ActionRow>
-                        )}
-                      >
-                        <p>Are you sure you want to unenroll?.</p>
-                      </AlertModal>
-                    </div>
-                  )
+                        </ActionRow>
+                      )}
+                    >
+                      <p>Are you sure you want to unenroll?.</p>
+                    </AlertModal>
+                  </>
                 }
               </>
             );
@@ -116,4 +118,8 @@ const Table = ({ data, handleClickUnenroll }) => {
   );
 };
 
-export default Table;
+Table.propTypes = {
+  data: PropTypes.array.isRequired,
+};
+
+export { Table };

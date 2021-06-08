@@ -1,19 +1,14 @@
 const { createConfig } = require('@edx/frontend-build');
 
 module.exports = createConfig('eslint', {
+    "extends": [
+        "plugin:react-hooks/recommended",
+    ],
     "rules": {
         "import/prefer-default-export": "off",
-        "react/prop-types": "off",
         "import/no-unresolved": "off",
-        "no-param-reassign": "off",
-        "react/jsx-filename-extension": [
-            1,
-            {
-                "extensions": [
-                    ".js", 
-                    ".jsx"
-                ]
-            }
-        ],
+        "import/no-extraneous-dependencies": "off",
+        "react/jsx-filename-extension": "off",
+        "jsx-a11y/anchor-is-valid":"off",
     }
 });

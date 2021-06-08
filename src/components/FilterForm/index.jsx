@@ -6,16 +6,25 @@ import {
 import { useFormik } from 'formik';
 import './index.scss';
 import { Search, Delete } from '@edx/paragon/icons';
+import { useDispatch } from 'react-redux';
+import { filterEnrollmentsAction, clearFilterAction } from 'data/actions/enrollment';
 
-const Filter = ({ initialFilterValues, handleClickFilter, handleClickClear }) => {
+const FilterForm = () => {
+  const dispatch = useDispatch();
+  const initialFilterValues = {
+    usernameOrEmail: '',
+    courseId: '',
+    externalPlatform: '',
+    isActive: '',
+  };
   const formik = useFormik({
     initialValues: initialFilterValues,
-    onSubmit: data => handleClickFilter(data),
+    onSubmit: filters =>  dispatch(filterEnrollmentsAction(filters)),
   });
 
   const onClear = () => {
     formik.resetForm(initialFilterValues);
-    handleClickClear();
+    dispatch(clearFilterAction());
   };
 
   return (
@@ -90,4 +99,4 @@ const Filter = ({ initialFilterValues, handleClickFilter, handleClickClear }) =>
   );
 };
 
-export default Filter;
+export { FilterForm };
