@@ -2,11 +2,17 @@ import React, { useMemo, useCallback, useEffect } from 'react';
 
 import { useTable, useFilters, usePagination } from 'react-table'
 import {
-  Button, AlertModal, ActionRow, useToggle, Icon, Badge, DropdownFilter, Pagination, Alert, Toast
+  Button, AlertModal, ActionRow, useToggle, Icon, Badge, DropdownFilter, Pagination, Alert, Toast, Spinner
 } from '@edx/paragon';
 import { Close } from '@edx/paragon/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { unenrollAction, filterEnrollmentsAction, clearToastNotification } from 'data/actions/enrollment';
+import {
+  unenrollAction,
+  unenrollRequestAction,
+  filterEnrollmentsRequestAction,
+  filterEnrollmentsAction,
+  clearToastNotification,
+} from 'data/actions/enrollment';
 
 import { FilterForm } from 'components/FilterForm';
 
@@ -14,7 +20,15 @@ import './index.scss';
 
 const App = () => {
   const dispatch = useDispatch();
-  const { data, dataCount, pageCount, currentPage, showNotification, notificationMessage } = useSelector(state => state);
+  const {
+    data,
+    dataCount,
+    pageCount,
+    currentPage,
+    showNotification,
+    notificationMessage,
+    loading,
+  } = useSelector(state => state);
   const skipPageResetRef = React.useRef()
 
   const columns = useMemo(() => [
@@ -91,6 +105,7 @@ const App = () => {
                       <Button
                         variant="danger"
                         onClick={() => {
+                          dispatch(unenrollRequestAction());
                           dispatch(unenrollAction({
                             enrollment_id: row.original.id,
                             course_id: row.values.course_id,
@@ -123,7 +138,6 @@ const App = () => {
     prepareRow,
     state,
     gotoPage,
-    setFilter,
     setPageSize,
     setAllFilters,
   } = useTable({
@@ -144,6 +158,7 @@ const App = () => {
 
   const handleChangePage = useCallback(({ pageIndex, pageSize, filters }) => {
     if (filters.length) {
+      dispatch(filterEnrollmentsRequestAction());
       dispatch(filterEnrollmentsAction(pageSize, pageIndex, filters))
     }
   }, [dispatch])
@@ -161,6 +176,7 @@ const App = () => {
         setAllFilters={setAllFilters}
         skipPageResetRef={skipPageResetRef}
       />
+
       <table className="table table-hover" {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -209,9 +225,9 @@ const App = () => {
           <select
             className="page-size-selector"
             defaulvalue={pageSize}
-            onChange={e => { 
+            onChange={e => {
               gotoPage(0)
-              setPageSize(Number(e.target.value)) 
+              setPageSize(Number(e.target.value))
             }}
           >
             {[5, 10, 20, 30, 40, 50].map(size => (
@@ -221,13 +237,18 @@ const App = () => {
             ))}
           </select>
         </div>
+        {
+          loading &&
+          <div className="d-flex justify-content-center align-items-center" variant="info">
+            Please wait...&nbsp;&nbsp;<Spinner animation="border" variant="primary" />
+          </div>
+        }
         <span>
           Showing <b>{page.length}</b> of <b>{dataCount}</b>
         </span>
       </div>
       {
-        showNotification
-        && (
+        showNotification && (
           <Toast onClose={() => dispatch(clearToastNotification())} show={showNotification}>
             {notificationMessage}
           </Toast>

@@ -75,7 +75,6 @@ const FilterForm = ({gotoPage, setAllFilters, skipPageResetRef }) => {
                 <Form.Control
                   type="text"
                   floatingLabel="Username or email"
-                  autoComplete="off"
                   ref={usernameOrEmail}
                 />
               </Form.Group>
@@ -83,7 +82,6 @@ const FilterForm = ({gotoPage, setAllFilters, skipPageResetRef }) => {
                 <Form.Control
                   type="text"
                   floatingLabel="Course id"
-                  autoComplete="off"
                   ref={courseId}
                 />
               </Form.Group>
@@ -92,7 +90,6 @@ const FilterForm = ({gotoPage, setAllFilters, skipPageResetRef }) => {
                   type="text"
                   ref={externalPlatform}
                   floatingLabel="External platform"
-                  autoComplete="off"
                 />
               </Form.Group>
               <Form.Group

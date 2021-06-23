@@ -1,7 +1,9 @@
 import {
+  FILTER_ENROLLMENTS_REQUEST,
   FILTER_ENROLLMENTS_SUCCESS,
   FILTER_ENROLLMENTS_FAILURE,
   FILTER_ENROLLMENTS_CLEAR,
+  UNENROLL_REQUEST,
   UNENROLL_SUCCESS,
   UNENROLL_FAILURE,
   TOAST_NOTIFICATION_CLEAR,
@@ -14,12 +16,18 @@ const initialState = {
   data: [],
   notificationMessage: null,
   showNotification: false,
+  loading: false,
 };
 
 const SUCCESSFULL_UNENROLL_MESSAGE = 'Successfully unenrolled.';
 
 const enrollmentReducer = (state = initialState, action) => {
   switch (action.type) {
+    case FILTER_ENROLLMENTS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
     case FILTER_ENROLLMENTS_SUCCESS:
       return {
         ...state,
@@ -27,6 +35,7 @@ const enrollmentReducer = (state = initialState, action) => {
         dataCount: action.dataCount,
         pageCount: action.pageCount,
         currentPage: action.currentPage,
+        loading: false,
       };
     case FILTER_ENROLLMENTS_FAILURE:
       return {
@@ -37,6 +46,7 @@ const enrollmentReducer = (state = initialState, action) => {
         dataCount: 0,
         pageCount: 0,
         currentPage: 0,
+        loading: false,
       };
     case FILTER_ENROLLMENTS_CLEAR:
       return {
@@ -55,6 +65,7 @@ const enrollmentReducer = (state = initialState, action) => {
         data: new_data,
         notificationMessage: SUCCESSFULL_UNENROLL_MESSAGE,
         showNotification: true,
+        loading: false,
       };
     case UNENROLL_FAILURE:
       return {
@@ -67,6 +78,11 @@ const enrollmentReducer = (state = initialState, action) => {
         ...state,
         notificationMessage: null,
         showNotification: false,
+      };
+    case UNENROLL_REQUEST:
+      return {
+        ...state,
+        loading: true,
       };
     default: return state;
   }
