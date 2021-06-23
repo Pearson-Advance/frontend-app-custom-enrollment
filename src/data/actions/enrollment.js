@@ -8,18 +8,22 @@ import {
 } from 'data/actions/types';
 
 import EnrollmentDataApiService from 'data/services/dataApi';
+import { getErrorMessages } from 'utils';
 
-const filterEnrollmentsAction = filterValues => dispatch => {
-  EnrollmentDataApiService.fetchEnrollments(filterValues)
+const filterEnrollmentsAction = (pageSize, pageIndex, filterValues) => dispatch => {
+  EnrollmentDataApiService.fetchEnrollments(pageSize, pageIndex, filterValues)
     .then((response) => {
       dispatch({
         type: FILTER_ENROLLMENTS_SUCCESS,
         data: response.data.results,
+        dataCount: response.data.count,
+        pageCount: response.data.num_pages,
+        currentPage: response.data.current_page,
       });
     }).catch((error) => {
       dispatch({
         type: FILTER_ENROLLMENTS_FAILURE,
-        error: JSON.parse(error.customAttributes.httpErrorResponseData).message,
+        error: getErrorMessages(error),
       });
     });
 };
@@ -29,13 +33,13 @@ const unenrollAction = params => dispatch => {
     .then((response) => {
       dispatch({
         type: UNENROLL_SUCCESS,
-        data: response.data.result[0].is_active,
+        data: response.data.result,
         enrollmentId: params.enrollment_id,
       });
     }).catch((error) => {
       dispatch({
         type: UNENROLL_FAILURE,
-        error: JSON.parse(error.customAttributes.httpErrorResponseData).message,
+        error: getErrorMessages(error),
       });
     });
 };
@@ -47,6 +51,7 @@ const clearToastNotification = () => ({
 const clearFilterAction = () => ({
   type: FILTER_ENROLLMENTS_CLEAR,
 });
+
 
 export {
   filterEnrollmentsAction,

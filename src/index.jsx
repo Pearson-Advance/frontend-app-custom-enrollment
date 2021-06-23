@@ -23,7 +23,7 @@ subscribe(APP_READY, () => {
       <Switch>
         <Route path="/" component={App} exact />
       </Switch>
-      <Footer />
+      <Footer className="footer"/>
     </AppProvider>,
     document.getElementById('root'),
   );

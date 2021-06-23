@@ -8,6 +8,9 @@ import {
 } from 'data/actions/types';
 
 const initialState = {
+  dataCount: 0,
+  pageCount: 0,
+  currentPage: 0,
   data: [],
   notificationMessage: null,
   showNotification: false,
@@ -21,6 +24,9 @@ const enrollmentReducer = (state = initialState, action) => {
       return {
         ...state,
         data: action.data,
+        dataCount: action.dataCount,
+        pageCount: action.pageCount,
+        currentPage: action.currentPage,
       };
     case FILTER_ENROLLMENTS_FAILURE:
       return {
@@ -28,16 +34,25 @@ const enrollmentReducer = (state = initialState, action) => {
         data: [],
         notificationMessage: action.error,
         showNotification: true,
+        dataCount: 0,
+        pageCount: 0,
+        currentPage: 0,
       };
     case FILTER_ENROLLMENTS_CLEAR:
       return {
         ...state,
         data: [],
+        dataCount: 0,
+        pageCount: 0,
+        currentPage: 0,
       };
     case UNENROLL_SUCCESS:
-      state.data.find(item => item.id === action.enrollmentId).is_active = action.data;
+      let new_data = state.data.slice(0);
+      new_data.find(item => item.id === action.enrollmentId).is_active = action.data.is_active;
+
       return {
         ...state,
+        data: new_data,
         notificationMessage: SUCCESSFULL_UNENROLL_MESSAGE,
         showNotification: true,
       };

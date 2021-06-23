@@ -1,0 +1,25 @@
+.page-btn {
+    border: 1px solid black;
+    border-radius: 1.5em;
+    padding: 6px 21px;
+}
+
+.enrollment-container {
+    margin: 1em 2em;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.enrollment-container table {
+    margin-top: 20px;
+}
+
+.enrollment-container tr td {
+    vertical-align: middle;
+}
+
+.page-size-selector {
+    height: 40px;
+}

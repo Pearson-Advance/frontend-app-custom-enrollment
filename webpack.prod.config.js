@@ -7,6 +7,7 @@ module.exports = createConfig('webpack-prod', {
       components: path.resolve(__dirname, 'src/components'),
       hooks: path.resolve(__dirname, 'src/hooks'),
       data: path.resolve(__dirname, 'src/data'),
+      utils: path.resolve(__dirname, 'src/utils'),
     },
   },
 });

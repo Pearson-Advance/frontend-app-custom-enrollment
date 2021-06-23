@@ -1,5 +1,4 @@
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-
 const enrollmentBaseUrl = `${process.env.ENROLLMENT_API_BASE_URL}/api/v1`;
 
 class EnrollmentDataApiService {
@@ -9,15 +8,23 @@ class EnrollmentDataApiService {
     return getAuthenticatedHttpClient().post(url, data);
   }
 
-  static fetchEnrollments(filters) {
+  static fetchEnrollments(pageSize, pageIndex, filters) {
     // GET request to get data according to the filters set
+
+    const externalPlatform = filters.find(filter => filter.id === 'external_platform')
+    const usernameOrEmail = filters.find(filter => filter.id === 'username')
+    const courseId = filters.find(filter => filter.id === 'course_id')
+    const isActive = filters.find(filter => filter.id === 'is_active')
+
     const queryParams = {
-      username_or_email: filters.usernameOrEmail,
-      course_id: filters.courseId,
-      external_platform: filters.externalPlatform,
-      is_active: filters.isActive,
+      username_or_email: usernameOrEmail ? usernameOrEmail.value.trim() : null,
+      course_id: courseId ? courseId.value.trim() : null,
+      external_platform: externalPlatform ? externalPlatform.value.trim() : null,
+      is_active: isActive ? (isActive.value ? isActive.value : null) : null,
+      page_size: pageSize,
+      page: pageIndex + 1,
     };
-    const url = `${enrollmentBaseUrl}/batch-enrollment`;
+    const url = `${enrollmentBaseUrl}/course-enrollment`;
     return getAuthenticatedHttpClient().get(url, {
       params: queryParams,
     });

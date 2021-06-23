@@ -1,37 +1,56 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import {
   Col, Form, Card, Button, Icon, ButtonGroup, Tooltip, OverlayTrigger,
 } from '@edx/paragon';
-import { useFormik } from 'formik';
 import './index.scss';
 import { Search, Delete } from '@edx/paragon/icons';
 import { useDispatch } from 'react-redux';
-import { filterEnrollmentsAction, clearFilterAction } from 'data/actions/enrollment';
+import { clearFilterAction } from 'data/actions/enrollment';
 
-const FilterForm = () => {
+
+const FilterForm = ({gotoPage, setAllFilters, skipPageResetRef }) => {
   const dispatch = useDispatch();
-  const initialFilterValues = {
-    usernameOrEmail: '',
-    courseId: '',
-    externalPlatform: '',
-    isActive: '',
-  };
-  const formik = useFormik({
-    initialValues: initialFilterValues,
-    onSubmit: filters =>  dispatch(filterEnrollmentsAction(filters)),
-  });
+  const usernameOrEmail = useRef('');
+  const courseId = useRef('');
+  const externalPlatform = useRef('');
+  const isActive = useRef('');
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const filters = [
+      {
+        "id": "external_platform",
+        "value": externalPlatform.current.value
+      },
+      {
+        "id": "course_id",
+        "value": courseId.current.value
+      },
+      {
+        "id": "username",
+        "value": usernameOrEmail.current.value
+      },
+      {
+        "id": "is_active",
+        "value": isActive.current.value
+      }
+    ];
+    gotoPage(0)
+    setAllFilters(filters)
+    skipPageResetRef.current = true
+  }
 
   const onClear = () => {
-    formik.resetForm(initialFilterValues);
-    dispatch(clearFilterAction());
+    setAllFilters([]);
+    dispatch(clearFilterAction())
   };
 
   return (
     <div className="filter-container col-12 mt-3">
       <Card>
         <Card.Body>
-          <Form onSubmit={formik.handleSubmit}>
+          <Form onSubmit={handleSubmit}>
             <Card.Title className="filter-header">
               Filters
               <ButtonGroup size="sm">
@@ -40,7 +59,7 @@ const FilterForm = () => {
                   placement="top"
                   overlay={<Tooltip id="tooltip-top">Clear filters</Tooltip>}
                 >
-                  <Button variant="inverse-primary" onClick={onClear}><Icon src={Delete} /></Button>
+                  <Button variant="inverse-primary" type="reset" onClick={onClear}><Icon src={Delete} /></Button>
                 </OverlayTrigger>
                 <OverlayTrigger
                   key="search"
@@ -56,24 +75,24 @@ const FilterForm = () => {
                 <Form.Control
                   type="text"
                   floatingLabel="Username or email"
-                  value={formik.values.usernameOrEmail}
-                  onChange={formik.handleChange}
+                  autoComplete="off"
+                  ref={usernameOrEmail}
                 />
               </Form.Group>
               <Form.Group as={Col} controlId="courseId">
                 <Form.Control
                   type="text"
                   floatingLabel="Course id"
-                  value={formik.values.courseId}
-                  onChange={formik.handleChange}
+                  autoComplete="off"
+                  ref={courseId}
                 />
               </Form.Group>
               <Form.Group as={Col} controlId="externalPlatform">
                 <Form.Control
                   type="text"
+                  ref={externalPlatform}
                   floatingLabel="External platform"
-                  value={formik.values.externalPlatform}
-                  onChange={formik.handleChange}
+                  autoComplete="off"
                 />
               </Form.Group>
               <Form.Group
@@ -83,8 +102,7 @@ const FilterForm = () => {
                 <Form.Control
                   floatingLabel="Is Active"
                   as="select"
-                  value={formik.values.isActive}
-                  onChange={formik.handleChange}
+                  ref={isActive}
                 >
                   <option value="">Choose...</option>
                   <option value="1">Yes</option>
