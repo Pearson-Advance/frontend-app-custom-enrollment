@@ -1,56 +1,41 @@
 import React, { useRef } from 'react';
-
+import PropTypes from 'prop-types';
 import {
   Col, Form, Card, Button, Icon, ButtonGroup, Tooltip, OverlayTrigger,
 } from '@edx/paragon';
 import './index.scss';
 import { Search, Delete } from '@edx/paragon/icons';
 import { useDispatch } from 'react-redux';
-import { clearFilterAction } from 'data/actions/enrollment';
+import {
+  filterEnrollmentsAction,
+  clearFilterAction,
+} from 'data/actions/enrollment';
 
-
-const FilterForm = ({gotoPage, setAllFilters, skipPageResetRef }) => {
+const FilterForm = ({ pageSize, pageIndex }) => {
   const dispatch = useDispatch();
   const usernameOrEmail = useRef('');
   const courseId = useRef('');
   const externalPlatform = useRef('');
   const isActive = useRef('');
 
-  const handleSubmit = e => {
+  const handleSearch = e => {
     e.preventDefault();
-    const filters = [
-      {
-        "id": "external_platform",
-        "value": externalPlatform.current.value
-      },
-      {
-        "id": "course_id",
-        "value": courseId.current.value
-      },
-      {
-        "id": "username",
-        "value": usernameOrEmail.current.value
-      },
-      {
-        "id": "is_active",
-        "value": isActive.current.value
-      }
-    ];
-    gotoPage(0)
-    setAllFilters(filters)
-    skipPageResetRef.current = true
-  }
-
-  const onClear = () => {
-    setAllFilters([]);
-    dispatch(clearFilterAction())
+    const filters = {
+      externalplatform: externalPlatform.current.value.trim(),
+      courseId: courseId.current.value.trim(),
+      usernameOrEmail: usernameOrEmail.current.value.trim(),
+      isActive: isActive.current.value.trim(),
+    };
+    dispatch(filterEnrollmentsAction(pageSize, pageIndex, filters));
   };
+
+  const handleClear = () => dispatch(clearFilterAction());
 
   return (
     <div className="filter-container col-12 mt-3">
       <Card>
         <Card.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSearch}>
             <Card.Title className="filter-header">
               Filters
               <ButtonGroup size="sm">
@@ -59,7 +44,7 @@ const FilterForm = ({gotoPage, setAllFilters, skipPageResetRef }) => {
                   placement="top"
                   overlay={<Tooltip id="tooltip-top">Clear filters</Tooltip>}
                 >
-                  <Button variant="inverse-primary" type="reset" onClick={onClear}><Icon src={Delete} /></Button>
+                  <Button variant="inverse-primary" type="reset" onClick={handleClear}><Icon src={Delete} /></Button>
                 </OverlayTrigger>
                 <OverlayTrigger
                   key="search"
@@ -92,12 +77,9 @@ const FilterForm = ({gotoPage, setAllFilters, skipPageResetRef }) => {
                   floatingLabel="External platform"
                 />
               </Form.Group>
-              <Form.Group
-                as={Col}
-                controlId="isActive"
-              >
+              <Form.Group as={Col} controlId="isActive" >
                 <Form.Control
-                  floatingLabel="Is Active"
+                  floatingLabel="Is active"
                   as="select"
                   ref={isActive}
                 >
@@ -112,6 +94,11 @@ const FilterForm = ({gotoPage, setAllFilters, skipPageResetRef }) => {
       </Card>
     </div>
   );
+};
+
+FilterForm.propTypes = {
+  pageSize: PropTypes.number,
+  pageIndex: PropTypes.number,
 };
 
 export { FilterForm };

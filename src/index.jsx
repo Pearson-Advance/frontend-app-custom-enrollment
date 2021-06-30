@@ -11,7 +11,7 @@ import Header, { messages as headerMessages } from '@edx/frontend-component-head
 import Footer, { messages as footerMessages } from '@edx/frontend-component-footer';
 import { Route, Switch } from 'react-router-dom';
 
-import { App } from 'components/App';
+import { EnrollmentsList } from 'components/EnrollmentsList';
 import { store } from 'data/store';
 import appMessages from './i18n';
 import './index.scss';
@@ -21,7 +21,7 @@ subscribe(APP_READY, () => {
     <AppProvider store={store}>
       <Header />
       <Switch>
-        <Route path="/" component={App} exact />
+        <Route path="/" component={EnrollmentsList} exact />
       </Switch>
       <Footer className="footer"/>
     </AppProvider>,

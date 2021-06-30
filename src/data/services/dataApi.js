@@ -10,17 +10,11 @@ class EnrollmentDataApiService {
 
   static fetchEnrollments(pageSize, pageIndex, filters) {
     // GET request to get data according to the filters set
-
-    const externalPlatform = filters.find(filter => filter.id === 'external_platform')
-    const usernameOrEmail = filters.find(filter => filter.id === 'username')
-    const courseId = filters.find(filter => filter.id === 'course_id')
-    const isActive = filters.find(filter => filter.id === 'is_active')
-
     const queryParams = {
-      username_or_email: usernameOrEmail ? usernameOrEmail.value.trim() : null,
-      course_id: courseId ? courseId.value.trim() : null,
-      external_platform: externalPlatform ? externalPlatform.value.trim() : null,
-      is_active: isActive ? (isActive.value ? isActive.value : null) : null,
+      username_or_email: filters.usernameOrEmail ? filters.usernameOrEmail : null,
+      course_id: filters.courseId ? filters.courseId : null,
+      external_platform: filters.externalPlatform ? filters.externalPlatform : null,
+      is_active: filters.isActive ? (filters.isActive ? filters.isActive : null) : null,
       page_size: pageSize,
       page: pageIndex + 1,
     };
