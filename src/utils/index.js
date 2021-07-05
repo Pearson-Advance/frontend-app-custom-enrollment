@@ -1,39 +1,37 @@
-const addPeriodToString = (string) => {
-    if (typeof string === 'string') {
-        const punctuation = new Set(['.', ',', ':', '!', '?']);
-        if (punctuation.has(string.substr(-1))) {
-            return string;
-        }
-        return `${string}.`;
-    }
-    return string;
-};
-
+/**
+ * This helper function is in charge to parse error responses for any Http error in a properly format.
+ * @param {object} error Error response.
+ * @returns {String} Properly formated field error message.
+ * @example
+ * example 1:
+ * {"developer_message": "User matching query does not exist."}
+ *
+ * example 2:
+ * {
+ *    "field_errors": {
+ *      "is_active": {
+ *          "developer_message": "Is active filter should not be used alone. Please add at least one more filter."
+*        }
+ *    }
+ * }
+ */
 const getErrorMessages = (error) => {
-    if (typeof error === 'object') {
-        // For form validation from DRF, comes back as an object of fields:errors
-        if (error.response && error.response.data && typeof error.response.data === 'object') {
-            const error_msg = error.response.data;
-            if(!error_msg.field_errors)
-                return error.response.data.developer_message;
-            return Object.keys(error_msg.field_errors).map(
-                key => addPeriodToString(`${error_msg.field_errors[key].developer_message}`)
-            )[0];
-        }
-        // Some request responses contain a .message, as well as JS errors let's
-        // try to use the request data or message before the or base JS errors check
-        const message = (
-            error.response && (error.response.data || error.response.message)
-        ) || error.message || error;
-        return [addPeriodToString(message)];
-    }
-    if (typeof error === 'string') {
-        return [addPeriodToString(error)];
-    }
-    return ['Unknown error.'];
+  // For form validation from DRF, comes back as an object of fields:errors
+  if (error.response && error.response.data) {
+    const errorMessage = error.response.data;
+
+    if (!errorMessage.field_errors)
+      return error.response.data.developer_message;
+
+    // For multiple field errors.
+    return Object.keys(errorMessage.field_errors).map(
+      key => `${errorMessage.field_errors[key].developer_message}`,
+    );
+  }
+
+  // For generic Http errors like 500, 404 that does not contain field validation
+  // error messages.
+  return error.message;
 };
 
-export {
-    getErrorMessages,
-    addPeriodToString,
-};
+export { getErrorMessages };

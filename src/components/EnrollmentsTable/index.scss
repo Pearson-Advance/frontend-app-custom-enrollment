@@ -4,14 +4,12 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+
     table {
         margin-top: 20px;
-    }
-    tr td {
-        vertical-align: middle;
-    }
-}
 
-.page-size-selector {
-    height: 40px;
+        tr td {
+            vertical-align: middle;
+        }
+    }
 }

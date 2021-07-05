@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { FilterForm } from '../FilterForm';
-import { EnrollmentsTable } from '../EnrollmentsTable';
+import { FilterForm } from 'components/FilterForm';
+import { EnrollmentsTable } from 'components/EnrollmentsTable';
 
-const EnrollmentsList = () => {
+const EnrollmentList = () => {
   const {
     data,
     dataTotalCount,
@@ -12,7 +12,7 @@ const EnrollmentsList = () => {
   } = useSelector(state => state);
 
   return (
-    <div className="enrollments-container">
+    <section className="enrollments-container">
       <FilterForm
         pageSize={pageSize}
         pageIndex={pageIndex}
@@ -23,8 +23,8 @@ const EnrollmentsList = () => {
         pageSize={pageSize}
         pageIndex={pageIndex}
       />
-    </div>
+    </section>
   );
 };
 
-export { EnrollmentsList };
+export { EnrollmentList };

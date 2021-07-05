@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import {
   Col, Form, Card, Button, Icon, ButtonGroup, Tooltip, OverlayTrigger,
 } from '@edx/paragon';
-import './index.scss';
 import { Search, Delete } from '@edx/paragon/icons';
 import { useDispatch } from 'react-redux';
 import {
   filterEnrollmentsAction,
   clearFilterAction,
-} from 'data/actions/enrollment';
+} from 'data/actions/enrollmentCreator';
+
+import './index.scss';
 
 const FilterForm = ({ pageSize, pageIndex }) => {
   const dispatch = useDispatch();
@@ -17,22 +18,22 @@ const FilterForm = ({ pageSize, pageIndex }) => {
   const courseId = useRef('');
   const externalPlatform = useRef('');
   const isActive = useRef('');
-
   const handleSearch = e => {
     e.preventDefault();
+
     const filters = {
       externalplatform: externalPlatform.current.value.trim(),
       courseId: courseId.current.value.trim(),
       usernameOrEmail: usernameOrEmail.current.value.trim(),
       isActive: isActive.current.value.trim(),
     };
+
     dispatch(filterEnrollmentsAction(pageSize, pageIndex, filters));
   };
-
   const handleClear = () => dispatch(clearFilterAction());
 
   return (
-    <div className="filter-container col-12 mt-3">
+    <section className="filter-container col-12 mt-3">
       <Card>
         <Card.Body>
           <Form onSubmit={handleSearch}>
@@ -77,7 +78,7 @@ const FilterForm = ({ pageSize, pageIndex }) => {
                   floatingLabel="External platform"
                 />
               </Form.Group>
-              <Form.Group as={Col} controlId="isActive" >
+              <Form.Group as={Col} controlId="isActive">
                 <Form.Control
                   floatingLabel="Is active"
                   as="select"
@@ -92,13 +93,18 @@ const FilterForm = ({ pageSize, pageIndex }) => {
           </Form>
         </Card.Body>
       </Card>
-    </div>
+    </section>
   );
 };
 
 FilterForm.propTypes = {
   pageSize: PropTypes.number,
   pageIndex: PropTypes.number,
+};
+
+FilterForm.defaultProps = {
+  pageSize: 0,
+  pageIndex: 0,
 };
 
 export { FilterForm };

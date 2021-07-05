@@ -1,7 +1,6 @@
 const { createConfig } = require('@edx/frontend-build');
 
 module.exports = createConfig('jest', {
-  modulePaths: ['src'],
   setupFiles: [
     '<rootDir>/src/setupTest.js',
   ],

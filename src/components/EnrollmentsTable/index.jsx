@@ -6,8 +6,9 @@ import { COLUMNS } from './columns';
 
 import './index.scss';
 
-const EnrollmentsTable = ({ data, dataTotalCount, pageSize, pageIndex }) => {
-  const columns = useMemo(() => COLUMNS, []);
+const EnrollmentsTable = ({
+  data, dataTotalCount, pageSize, pageIndex,
+}) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -15,13 +16,13 @@ const EnrollmentsTable = ({ data, dataTotalCount, pageSize, pageIndex }) => {
     rows,
     prepareRow,
   } = useTable({
-    columns,
-    data,
-    initialState: { pageIndex: pageIndex, pageSize: pageSize },
+    columns: useMemo(() => COLUMNS, []),
+    data: data,
+    initialState: { pageIndex, pageSize },
   });
 
   return (
-    <div className="enrollments-container">
+    <section className="enrollments-container">
       <table className="table table-hover" {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -48,18 +49,20 @@ const EnrollmentsTable = ({ data, dataTotalCount, pageSize, pageIndex }) => {
             );
           })}
           {
-            !dataTotalCount &&
-            <tr>
-              <td colSpan="9">
-                <Alert className="d-flex justify-content-center" variant="info">
-                  No data to show.
-                </Alert>
-              </td>
-            </tr>
+            !dataTotalCount
+            && (
+              <tr>
+                <td colSpan="9">
+                  <Alert className="d-flex justify-content-center" variant="info">
+                    No data to show.
+                  </Alert>
+                </td>
+              </tr>
+            )
           }
         </tbody>
       </table>
-    </div>
+    </section>
   );
 };
 
@@ -68,6 +71,13 @@ EnrollmentsTable.propTypes = {
   dataTotalCount: PropTypes.number,
   pageSize: PropTypes.number,
   pageIndex: PropTypes.number,
+};
+
+EnrollmentsTable.defaultProps = {
+  data: [],
+  dataTotalCount: 0,
+  pageSize: 0,
+  pageIndex: 0,
 };
 
 export { EnrollmentsTable };
