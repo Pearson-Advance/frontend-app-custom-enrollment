@@ -1,0 +1,15 @@
+.enrollments-container {
+    margin: 1em 5em;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    table {
+        margin-top: 20px;
+
+        tr td {
+            vertical-align: middle;
+        }
+    }
+}
