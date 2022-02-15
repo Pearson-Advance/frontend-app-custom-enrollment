@@ -1,7 +1,7 @@
-import { DropdownFilter, Badge } from '@edx/paragon';
+import { DropdownFilter, Badge, Dropdown } from '@edx/paragon';
 import React from 'react';
 
-export const COLUMNS = [
+export const getColumns = props => [
   {
     Header: 'User',
     accessor: 'username',
@@ -49,5 +49,24 @@ export const COLUMNS = [
     Header: 'External ID',
     accessor: 'external_course_id',
     disableFilters: true,
+  },
+  {
+    Header: 'Action',
+    Cell: ({ row }) => {
+      return (
+        <>
+          <Dropdown>
+            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+              Action
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={row.values.is_active ? () => { props.open(); props.setRow(row.values); } : null}>
+                {row.values.is_active ? 'Unenroll' : 'Enroll'}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </>
+      );
+    },
   },
 ];
