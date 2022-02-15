@@ -1,12 +1,26 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTable } from 'react-table';
-import { Alert } from '@edx/paragon';
-import { COLUMNS } from './columns';
+import { Alert, Toast, useToggle, AlertModal, ActionRow, Button } from '@edx/paragon';
+import { getColumns } from 'components/EnrollmentsTable/columns';
+import { useDispatch } from 'react-redux';
+import { unenrollAction } from 'data/actions/unenrollmentCreator';
 
 const EnrollmentsTable = ({
   data, dataTotalCount, pageSize, pageIndex,
 }) => {
+  const dispatch = useDispatch();
+  const [show, setShow] = useState(false);
+  const [isOpen, open, close] = useToggle(false)
+  const [selectedRow, setRow] = useState({});
+
+  const unenrollData = {
+    course_id: selectedRow.course_id,
+    username: selectedRow.username,
+  };
+
+  const COLUMNS = useMemo(() => getColumns({ open, setRow }), []); //eslint-disable-line react-hooks/exhaustive-deps
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -14,7 +28,7 @@ const EnrollmentsTable = ({
     rows,
     prepareRow,
   } = useTable({
-    columns: useMemo(() => COLUMNS, []),
+    columns: COLUMNS,
     data: data,
     initialState: { pageIndex, pageSize },
   });
@@ -58,7 +72,35 @@ const EnrollmentsTable = ({
           )
         }
       </tbody>
-    </table>
+      <Toast
+        onClose={() => setShow(false)}
+        show={show}
+      >
+        Successfully Unenrolled !
+      </Toast>
+      <AlertModal
+        title='Are you sure you want to unenroll?'
+        isOpen={isOpen}
+        onClose={close}
+        footerNode={(
+          <ActionRow>
+            <Button variant="tertiary" onClick={close}>cancel</Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                setShow(true);
+                dispatch(unenrollAction(unenrollData));
+                close()
+              }}>
+              Submit
+            </Button>
+          </ActionRow>
+        )}>
+        <p>
+          Once submitted the user will be unenrolled from the course.
+        </p>
+      </AlertModal>
+    </table >
   );
 };
 

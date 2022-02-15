@@ -1,5 +1,11 @@
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
+const createUnenrollment = (data) => {
+  // POST request to make an unenrollment.
+  const url = `${process.env.ENROLLMENT_API_BASE_URL}/unenrollment`;
+  return getAuthenticatedHttpClient().post(url, data);
+}
+
 const fetchEnrollments = (pageSize, pageIndex, filters) => {
   // GET request to get data according to the filters set.
   return getAuthenticatedHttpClient().get(`${process.env.ENROLLMENT_API_BASE_URL}/course-enrollment`, {
@@ -14,4 +20,7 @@ const fetchEnrollments = (pageSize, pageIndex, filters) => {
   });
 };
 
-export { fetchEnrollments };
+export {
+  createUnenrollment,
+  fetchEnrollments
+};
